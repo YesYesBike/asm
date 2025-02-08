@@ -1,0 +1,22 @@
+target = asdf
+memmap = mem.map
+
+__def__:
+	exit 0
+
+dump:
+	hexdump -s0x78 $(target)
+
+dis:
+	ndisasm -b64 -e0x78 $(target)
+
+entry:
+	readelf -h $(target) | grep Entry
+
+sym:
+	sed 0,/^Real/d $(memmap) | awk '{print $3, $2}' | fzf-tmux -p 80% |\
+		cut -d' ' -f2 | sed s/^/*0x/ | tr -d '\n' | xsel -ib
+
+test:
+	nasm -f bin -o asdf test.asm
+	chmod u+x asdf
