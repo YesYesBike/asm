@@ -1,8 +1,8 @@
 target = asdf
+target_test = testistest
 memmap = mem.map
 
-__def__:
-	exit 0
+__def__: sym
 
 dump:
 	hexdump -s0x78 $(target)
@@ -10,13 +10,13 @@ dump:
 dis:
 	ndisasm -b64 -e0x78 $(target)
 
-entry:
-	readelf -h $(target) | grep Entry
+#entry:
+#	readelf -h $(target) | grep Entry
 
 sym:
-	sed 0,/^Real/d $(memmap) | awk '{print $3, $2}' | fzf-tmux -p 80% |\
-		cut -d' ' -f2 | sed s/^/*0x/ | tr -d '\n' | xsel -ib
+	sed 0,/^Real/d $(memmap) | awk '{print $3, $2}' | column -t |\
+		fzf-tmux -p 80% | awk '{print $2}' | sed s/^/0x/ | tr -d '\n' | xsel -ib
 
 test:
-	nasm -f bin -o asdf test.asm
-	chmod u+x asdf
+	nasm -f bin -o $(target_test) test.asm
+	#chmod u+x $(target_test)

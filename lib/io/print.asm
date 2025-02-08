@@ -1,15 +1,23 @@
 %ifndef FUNC_PRINT
 %define FUNC_PRINT
 
-; Befor Use it
+; Before Use It
 ; 1. Define the value: _PRINT_BUF_SIZE (4096,0x1000)
-; 2. Append 'print.BUF' end of code
-; 3. Change the segment size of memory in PROGRAM_HEADER
-;		CODE_SIZE -> CODE_SIZE+_PRINT_BUF_SIZE
+; 2. Append print.BUF end of the code
+; 3. Add the value of _PRINT_BUF_SIZE to EXTRA_MEMORY_SIZE
+; 4. (Optional)Align print.BUF
+
+; Before You Exit
+; Flush the buffer using 'print_flush'
+
 %include "lib/io/print_flush.asm"
 
 align 16, db 0
 print: ; void print(int fd{rdi}, char *str{rsi}, size_t len{rdx})
+; rax: current buffer position
+; r8: buffer endpoint
+; rdx: string endpoint
+; cl: temp character
 	push rax
 	push rcx
 	push rdx
@@ -17,12 +25,12 @@ print: ; void print(int fd{rdi}, char *str{rsi}, size_t len{rdx})
 	push r8
 
 	mov rax, .BUF
-	add rax, [.IDX]		; rax: cur buf pos
+	add rax, [.IDX]
 
 	mov r8, .BUF
-	add r8, _PRINT_BUF_SIZE		; r8: buf endpoint
+	add r8, _PRINT_BUF_SIZE
 
-	add rdx, rsi	; rdx: str endpoint
+	add rdx, rsi
 
 .loop:
 	cmp rsi, rdx		; if str reached end

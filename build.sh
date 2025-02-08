@@ -1,2 +1,2 @@
-nasm -f bin -o asdf packe.asm
+nasm -f bin -o asdf lol.asm
 chmod u+x asdf
