@@ -3,8 +3,6 @@
 
 %include "lib/sys/syscalls.asm"
 
-; Before Use It
-
 print_flush: ; void print_flush(int fd{rdi})
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 	push rax

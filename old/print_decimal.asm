@@ -51,8 +51,8 @@ PROGRAM_HEADER:
 %include "lib/sys/exit.asm"
 %include "lib/io/print.asm"
 
-%include "lib/io/print_int_x.asm"
-%include "lib/debug/dump_register.asm"
+%include "lib/io/print_int_d.asm"
+%include "lib/io/print_int_u.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -61,15 +61,42 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	mov rax, SYS_STDOUT
-	mov rbx, print_int_x
-	push rbx
-	push rax
-	call dump_register
+	mov rdi, 1
+	mov rsi, 0xffffffffffffffff
+	call print_int_d
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
+
+	mov rsi, 0xffffffffffffffff
+	call print_int_u
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
+
+	mov rsi, 0x0
+	call print_int_d
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
+
+	mov rsi, 0x0
+	call print_int_u
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
 
 	call print_flush
 
+	xor rdi, rdi
 	jmp exit
+
+.NEWLINE:
+	db `\n`
 
 align 16, db 0
 END:

@@ -8,6 +8,7 @@ print_int_x: ; void print_int_x(int fd{rdi}, long num{rsi})
 ; rbp: stores the original stack pointer
 ; rsp: points to the string
 ; dil: temp num/digit storage
+	push rdx
 	push rbp
 	push rsi
 	push rdi		; fd: [rbp]
@@ -48,6 +49,7 @@ align 16
 	add rsp, 8		; pop rdi
 	pop rsi
 	pop rbp
+	pop rdx
 	ret
 
 align 16, db 0

@@ -3,7 +3,7 @@
 
 %include "lib/sys/syscalls.asm"
 
-exit:	; void exit(status{dil})
+exit:	; _Noreturn void exit(status{dil})
 	mov rax, SYS_EXIT
 	syscall
 
