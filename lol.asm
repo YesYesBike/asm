@@ -50,7 +50,10 @@ PROGRAM_HEADER:
 
 %include "lib/sys/exit.asm"
 %include "lib/io/print.asm"
-%include "lib/math/int/print_int_x.asm"
+
+%include "lib/io/print_int_x.asm"
+%include "lib/io/print_int_o.asm"
+%include "lib/io/print_int_b.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -59,23 +62,21 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	mov rdi, 0x1234
-	call print_int_x
-
 	mov rdi, 1
+	mov rsi, 0x1234
+	call print_int_b
+
 	mov rsi, .NEWLINE
 	mov rdx, 1
 	call print
 
-	mov rdi, 0x0
-	call print_int_x
+	mov rsi, 0x0
+	call print_int_b
 
-	mov rdi, 1
 	mov rsi, .NEWLINE
 	mov rdx, 1
 	call print
 
-	mov rdi, SYS_STDOUT
 	call print_flush
 
 	xor rdi, rdi

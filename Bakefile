@@ -4,11 +4,18 @@ memmap = mem.map
 
 __def__: sym
 
+_test:
+	bake="bake"
+	echo $(1|`which $bake`)		#sjfkls
+	#comment
+	echo I like $(1|$bake)
+
 dump:
-	hexdump -s0x78 $(target)
+	#TODOTODO
+	hexdump -s$(1|0x78) $(target)
 
 dis:
-	ndisasm -b64 -e0x78 $(target)
+	ndisasm -b64 -e$(1|0x78) $(target)
 
 #entry:
 #	readelf -h $(target) | grep Entry
@@ -19,4 +26,4 @@ sym:
 
 test:
 	nasm -f bin -o $(target_test) test.asm
-	#chmod u+x $(target_test)
+	chmod u+x $(target_test)
