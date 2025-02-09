@@ -3,9 +3,10 @@
 
 %include "lib/sys/exit.asm"
 
-debug_exit: ; _Noreturn void debug_exit(void)
-; made to distinguish from the normal exit code
-	xor rdi, rdi
+%macro debug_exit 1
+; %1: exit code
+	mov dil, %1
 	jmp exit
+%endmacro
 
 %endif

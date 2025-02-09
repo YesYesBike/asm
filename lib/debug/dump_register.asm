@@ -1,6 +1,8 @@
 %ifndef FUNC_DUMP_REGISTER
 %define FUNC_DUMP_REGISTER
 
+%include "lib/io/print.asm"
+
 dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
 ; void func_p(int fd{rdi}, long num{rsi}) / ex)print_int_x
 
