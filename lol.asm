@@ -51,9 +51,8 @@ PROGRAM_HEADER:
 %include "lib/sys/exit.asm"
 %include "lib/io/print.asm"
 
-%include "lib/io/print_int_x.asm"
-%include "lib/io/print_int_o.asm"
-%include "lib/io/print_int_b.asm"
+%include "lib/io/print_int_d.asm"
+%include "lib/io/print_int_u.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -63,15 +62,29 @@ PROGRAM_HEADER:
 
 START:
 	mov rdi, 1
-	mov rsi, 0x1234
-	call print_int_b
+	mov rsi, 0xffffffffffffffff
+	call print_int_d
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
+
+	mov rsi, 0xffffffffffffffff
+	call print_int_u
 
 	mov rsi, .NEWLINE
 	mov rdx, 1
 	call print
 
 	mov rsi, 0x0
-	call print_int_b
+	call print_int_d
+
+	mov rsi, .NEWLINE
+	mov rdx, 1
+	call print
+
+	mov rsi, 0x0
+	call print_int_u
 
 	mov rsi, .NEWLINE
 	mov rdx, 1

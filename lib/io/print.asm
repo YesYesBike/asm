@@ -32,6 +32,7 @@ print: ; void print(int fd{rdi}, char *str{rsi}, size_t len{rdx})
 
 	add rdx, rsi
 
+align 16
 .loop:
 	cmp rsi, rdx		; if str reached end
 	je .loop_end		; then break

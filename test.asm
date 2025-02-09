@@ -4,8 +4,7 @@
 
 %define LOAD_ADDRESS		0x00020000
 %define CODE_SIZE			(END - (LOAD_ADDRESS+0x78))
-%define EXTRA_MEMORY_SIZE	_PRINT_BUF_SIZE
-%define _PRINT_BUF_SIZE		4096
+%define EXTRA_MEMORY_SIZE	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;HEADER;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -49,11 +48,6 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
-%include "lib/io/print.asm"
-
-%include "lib/io/print_int_x.asm"
-%include "lib/io/print_int_o.asm"
-%include "lib/io/print_int_b.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -62,29 +56,10 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	mov rdi, 1
-	mov rsi, 0xffff
-	call print_int_x
-
-	mov rsi, .NEWLINE
-	mov rdx, 1
-	call print
-
-	mov rsi, 0x0
-	call print_int_x
-
-	mov rsi, .NEWLINE
-	mov rdx, 1
-	call print
-
-	call print_flush
-
-	xor rdi, rdi
+	mov eax, 20
+	mov esi, 10
+	div esi
+	mov edi, eax
 	jmp exit
 
-.NEWLINE:
-	db `\n`
-
-align 16, db 0
 END:
-print.BUF:
