@@ -4,7 +4,8 @@
 
 %define LOAD_ADDRESS		0x00020000
 %define CODE_SIZE			(END - (LOAD_ADDRESS+0x78))
-%define EXTRA_MEMORY_SIZE	0
+%define EXTRA_MEMORY_SIZE	_PRINT_BUF_SIZE
+%define _PRINT_BUF_SIZE		64
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;HEADER;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -12,6 +13,7 @@
 
 BITS 64
 org LOAD_ADDRESS
+print.BUF:		; elf is left
 ELF_HEADER:
 	db 0x7F, "ELF"
 	db 0x02							; 0x1: 32, 0x2: 64
@@ -48,6 +50,7 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
+%include "lib/io/print.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -55,7 +58,18 @@ PROGRAM_HEADER:
 
 [map all mem.map]
 
-START:
+START: ; where's print.BUF?
+	mov rdi, SYS_STDOUT
+	mov rsi, .MSG
+	mov rdx, .MSG_END-.MSG
+	call print
+
+	call print_flush
+
+	xor rdi, rdi
 	jmp exit
 
+.MSG:
+	db `This is the message\n`
+.MSG_END:
 END:

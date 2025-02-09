@@ -47,7 +47,7 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INCLUDES;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-%include "lib/sys/exit.asm"
+%include "lib/sys/syscalls.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,6 +56,11 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	jmp exit
+	mov rcx, exit
+	mov word [rcx], 0xfeeb
+
+exit: ; now infinite loop
+	mov rax, SYS_EXIT
+	syscall
 
 END:
