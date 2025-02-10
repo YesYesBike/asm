@@ -23,6 +23,7 @@ dump_stack: ; void dump_stack(int fd{rdi}, int num{rsi}, func_p{rdx})
 	push rsi
 
 	mov rbp, [.RSP_ORIG]	; rbp init
+	add rbp, 8				; exclude return address of this fuction
 	mov rax, rsi			; rsi free
 	shl rax, 3
 	mov rcx, rax			; rcx init

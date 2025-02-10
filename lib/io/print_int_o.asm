@@ -16,22 +16,21 @@ print_int_o: ; void print_int_o(int fd{rdi}, long num{rsi})
 
 align 16
 .loop:
-	test rsi, rsi
-	jz .prefix
-
 	mov dil, sil
-	and dil, 7
-	or dil, 0x30			; 0~9 -> '0'~'9'
+	and rdi, 7
+	or rdi, 0x30	; 0~9->'0'~'9'
 
 	dec rsp
 	mov byte [rsp], dil		; push the digit
 
 	shr rsi, 3
-	jmp .loop
+	test rsi, rsi
+	jnz .loop
 
 .prefix:
 	dec rsp
-	mov byte [rsp], '0'
+	dec rsp
+	mov word [rsp], '0o'
 
 .print:
 ; rdi: fd([rbp])

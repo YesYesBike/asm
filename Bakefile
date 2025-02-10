@@ -27,3 +27,5 @@ sym:
 test:
 	nasm -f bin -o $(target_test) test.asm
 	chmod u+x $(target_test)
+	./$(target_test)
+	echo "Exit Code: $?"

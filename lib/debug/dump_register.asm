@@ -7,6 +7,7 @@ dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
 ; void func_p(int fd{rdi}, long num{rsi}) / ex)print_int_x
 
 ; dump registers(rax~r15) to 'fd' using 'func_p'
+; TODO remove note1
 ; NOTE: 'fd' and 'func_p' affects to rsp. So subtract 16 from rsp to get
 ;       the right rsp value
 ; NOTE2: push 'func_p' first and 'fd' next (so confusing)
@@ -15,11 +16,12 @@ dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
 ; rcx: register name string pointer
 ; rdx: string length per register
 ; rbx: 'func_p'
-; rbp: original rsp
+; rbp: original rsp(before call) -> return address(end of the loop)
 ; rsi: second argument for 'func_p' and 'print'
 ; rdi: 'fd'
+; .RETADDR: points to the return address
 
-	mov [.RSP_ORIG], rsp
+	mov [.RETADDR], rsp
 	push r15
 	push r14
 	push r13
@@ -31,8 +33,9 @@ dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
 	push rdi
 	push rsi
 	push rbp
-	mov rbp, [.RSP_ORIG]	; now rbp has the original rsp value
-	push rbp				; rsp
+	mov rbp, [.RETADDR]
+	add rbp, 8		; rbp: original rsp value before call(points 'fd' as well)
+	push rbp		; rsp
 	push rbx
 	push rdx
 	push rcx
@@ -41,13 +44,14 @@ dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
 	mov rax, rsp
 
 	mov rcx, rbp	; rcx: temp
-	add rcx, 8
 	mov rdi, [rcx]	; rdi: fd
 	add rcx, 8
 	mov rbx, [rcx]	; rbx: func_p
 
 	mov rcx, .REG_NAMES
 	mov rdx, (.REG_NAMES_END-.REG_NAMES)/16
+
+	sub rbp, 8		; now rbp has the return address
 
 align 16
 .loop:
@@ -84,10 +88,10 @@ align 16
 	pop r13
 	pop r14
 	pop r15
-	mov rsp, [.RSP_ORIG]
+	mov rsp, [.RETADDR]
 	ret
 
-.RSP_ORIG:
+.RETADDR:
 	dq 0
 .REG_NAMES:
 	db `\nrax: `

@@ -48,6 +48,7 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
+%include "lib/debug/dump_stack.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,10 +57,6 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	mov eax, 20
-	mov esi, 10
-	div esi
-	mov edi, eax
 	jmp exit
 
 END:
