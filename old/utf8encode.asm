@@ -49,7 +49,10 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
-%include "lib/io/print.asm"
+%include "lib/debug/debug_exit.asm"
+%include "lib/etc/swap.asm"
+%include "lib/io/print_int_x.asm"
+%include "lib/io/utf8getbyte.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,19 +60,80 @@ PROGRAM_HEADER:
 
 [map all mem.map]
 
-START:
-	mov rdi, SYS_STDOUT
-	mov rsi, .TEXT
-	mov rdx, 4
+; dependency
+; utf8getbyte
+utf8encode: ; long{rax} utf8encode(int code{edi})
+; returns the encoded charset of 'code'
+; if fails, returns zero
+; most significant byte indicates the number of bytes
+	call utf8getbyte	; al = 0~6
+	test al, al			; 'code' can not be presented
+	jz .fail
+	test al, ~1			; one byte
+	jz .ret_one
 
-	call print
+	push rbx
+	push rcx
+	push rdx
+
+	push rax			; pushing byte count
+	mov rcx, 7
+	sub rcx, rax
+	mov rax, 0b11111110
+	shl al, cl			; al: 0b110XXXXX~0b1111110X
+
+	pop rcx				; byte count
+	dec rcx
+	mov rbx, rcx
+	imul ecx, 6
+	shl ebx, 3
+	mov edx, edi
+	shr edx, cl
+	or al, cl
+	swap rcx, rbx
+	shl rax, cl
+
+.loop:
+	swap rbx, rcx
+	sub rcx, 6
+	sub rbx, 8
+	mov edx, edi
+	shr edx, cl
+
+	and edx, 0b111111
+	or edx, 0b10000000
+	swap rbx, rcx
+	shl edx, cl
+	or rax, rdx
+
+	test rcx, rcx
+	jnz .loop
+
+.ret:
+	pop rdx
+	pop rcx
+	pop rbx
+.fail:
+	ret
+
+.ret_one:
+	mov rax, rdi
+	ret
+
+START:
+	mov rdi, 0xAC00
+	call utf8encode
+
+	mov rdi, SYS_STDOUT
+	mov rsi, rax
+	call print_int_x
+
+	call print_flush
 
 	xor dil, dil
 	jmp exit
 
-.TEXT:
-	db `fuck`
-
-align 16
 END:
+
+align 16, db 0
 print.BUF:

@@ -49,7 +49,7 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
-%include "lib/io/print.asm"
+%include "lib/io/print_int_x.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,19 +57,117 @@ PROGRAM_HEADER:
 
 [map all mem.map]
 
+utf8encode: ; long{rax} utf8encode(int code{edi})
+; return the encoded charset of 'code'
+	call utf8encode_getbyte
+
+utf8encode_getbyte: ; byte{al} utf8encode_getbyte(int code{edi})
+; return the number of bytes of the 'code' needed in utf8 format
+; return 0 if code is out of range
+	xor rax, rax
+	test edi, (1<<31)		; not defined
+	jnz .fail
+	test edi, (0x7c<<24)
+	jnz .ret_6
+	test edi, (0x3e<<20)
+	jnz .ret_5
+	test edi, (0x1f<<16)
+	jnz .ret_4
+	test edi, (0xf8<<8)
+	jnz .ret_3
+	test edi, (0x78<<4)
+	jnz .ret_2
+	jmp .ret_1
+
+.ret_6:
+	inc al
+.ret_5:
+	inc al
+.ret_4:
+	inc al
+.ret_3:
+	inc al
+.ret_2:
+	inc al
+.ret_1:
+	inc al
+.fail:
+	ret
+
 START:
-	mov rdi, SYS_STDOUT
-	mov rsi, .TEXT
-	mov rdx, 4
+.test1:
+	call utf8encode_getbyte
+	cmp al, 1
+	jnz .fail
+	inc rdi
+	cmp rdi, 0x7f
+	jbe .test1
 
-	call print
+.test2:
+	call utf8encode_getbyte
+	cmp al, 2
+	jnz .fail
+	inc rdi
+	cmp rdi, 0x7ff
+	jbe .test2
 
+.test3:
+	call utf8encode_getbyte
+	cmp al, 3
+	jnz .fail
+	inc rdi
+	cmp rdi, 0xffff
+	jbe .test3
+
+.test4:
+	call utf8encode_getbyte
+	cmp al, 4
+	jnz .fail
+	inc rdi
+	cmp rdi, 0x1fffff
+	jbe .test4
+
+.test5:
+	call utf8encode_getbyte
+	cmp al, 5
+	jnz .fail
+	inc rdi
+	cmp rdi, 0x3ffffff
+	jbe .test5
+
+.test6:
+	call utf8encode_getbyte
+	cmp al, 6
+	jnz .fail
+	inc rdi
+	cmp rdi, 0x7fffffff
+	jbe .test6
+
+
+	mov rcx, 0xffffffff			; can't compare 64bit immediate value
+.test0:
+	call utf8encode_getbyte
+	test al, al
+	jnz .fail
+	inc rdi
+	cmp rdi, rcx
+	jbe .test0
+
+.success:
 	xor dil, dil
 	jmp exit
 
-.TEXT:
-	db `fuck`
+.fail:
+	mov rsi, rdi
+	mov rdi, SYS_STDOUT
+	call print_int_x
 
-align 16
+	call print_flush
+
+	mov dil, 1
+	jmp exit
+
 END:
+
+align 16, db 0
 print.BUF:

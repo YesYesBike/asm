@@ -49,6 +49,10 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
+%include "lib/debug/debug_exit.asm"
+%include "lib/etc/swap.asm"
+%include "lib/io/print_int_x.asm"
+%include "lib/io/utf8encode.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -56,25 +60,20 @@ PROGRAM_HEADER:
 
 [map all mem.map]
 
-; %include "lib/io/print_int_b.asm"
-; %include "lib/io/print_int_o.asm"
-; %include "lib/io/print_int_d.asm"
-; %include "lib/io/print_int_u.asm"
-; %include "lib/io/print_int_x.asm"
-%include "lib/io/strtoi_o.asm"
-
 START:
-	mov rdi, .TEXT
-	call strtoi_o
+	mov rdi, 0xAC00
+	call utf8encode
 
-._BP:
-	mov dil, al
+	mov rdi, SYS_STDOUT
+	mov rsi, rax
+	call print_int_x
+
+	call print_flush
+
+	xor dil, dil
 	jmp exit
 
-.TEXT:
-	db `0o20\0`
-
+align 16, db 0
 END:
 
-align 16, db 0
 print.BUF:
