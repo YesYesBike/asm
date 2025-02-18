@@ -1,12 +1,12 @@
-%ifndef FUNC_FILE_OPEN
-%define FUNC_FILE_OPEN
+%ifndef FUNC_CLOSE
+%define FUNC_CLOSE
 
 %include "lib/sys/syscalls.asm"
 
-file_open:
+close:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_OPEN
+	mov rax, SYS_CLOSE
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

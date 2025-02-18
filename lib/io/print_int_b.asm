@@ -3,7 +3,7 @@
 
 %include "lib/io/print.asm"
 
-print_int_b: ; void print_int_b(int fd{rdi}, long num{rsi})
+print_int_b:
 ; print the binary number from 'num' to 'fd'
 ; rbp: stores the original stack pointer
 ; rsp: points to the string

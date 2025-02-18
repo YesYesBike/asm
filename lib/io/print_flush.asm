@@ -3,7 +3,7 @@
 
 %include "lib/sys/syscalls.asm"
 
-print_flush: ; void print_flush(int fd{rdi})
+print_flush:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 	push rax
 	push rsi
@@ -14,8 +14,7 @@ print_flush: ; void print_flush(int fd{rdi})
 	mov rax, SYS_WRITE
 	syscall
 
-	xor rax, rax
-	mov [print.IDX], rax
+	mov	qword [print.IDX], 0
 
 	pop rdx
 	pop rsi

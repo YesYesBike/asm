@@ -49,9 +49,10 @@ PROGRAM_HEADER:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 %include "lib/sys/exit.asm"
-%include "lib/io/print_int_x.asm"
-%include "lib/debug/dump_memory.asm"
-%include "lib/debug/dump_register.asm"
+%include "lib/io/file_read.asm"
+%include "lib/io/term_init.asm"
+%include "lib/io/term_orig.asm"
+%include "lib/io/term_raw.asm"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;INSTRUCTION;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -60,34 +61,29 @@ PROGRAM_HEADER:
 [map all mem.map]
 
 START:
-	mov rax, qword [.TEXT]
+	call term_init
+	call term_raw
 
-	mov rdi, SYS_STDOUT
-	mov rsi, .TEXT
-	mov rdx, 8
-	mov rcx, print_int_x
-	call dump_memory
+.loop:
+	mov rdi, SYS_STDIN
+	mov rsi, .buf
+	mov rdx, 4
+	call file_read
 
-	push print_int_x
-	push SYS_STDOUT
-	call dump_register
+	test byte [.buf], ~'q'
+	jz .done
 
-	mov qword [.TEXT], rax
+	jmp .loop
 
-	mov rdi, SYS_STDOUT
-	mov rsi, .TEXT
-	mov rdx, 8
-	mov rcx, print_int_x
-	call dump_memory
-
-	call print_flush
-
+.done:
+	call term_orig
 	xor dil, dil
 	jmp exit
 
-.TEXT:
-	db 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8
+.buf:
+	times 4 db 0
 
-align 16
+align 16, db 0
 END:
+
 print.BUF:

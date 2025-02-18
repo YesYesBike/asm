@@ -3,7 +3,7 @@
 
 %include "lib/io/utf8getbyte.asm"
 
-utf8encode: ; long{rax} utf8encode(int code{edi})
+utf8encode:
 ; returns the encoded charset of 'code'
 ; if fails, returns zero
 ; most significant byte indicates the number of bytes

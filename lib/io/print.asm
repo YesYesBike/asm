@@ -1,19 +1,10 @@
 %ifndef FUNC_PRINT
 %define FUNC_PRINT
 
-; Before Use It
-; 1. Define the value: _PRINT_BUF_SIZE (4096,0x1000)
-; 2. Append print.BUF end of the code
-; 3. Add the value of _PRINT_BUF_SIZE to EXTRA_MEMORY_SIZE
-; 4. (Optional)Align print.BUF
-
-; Before You Exit
-; Flush the buffer using 'print_flush'
-
 %include "lib/io/print_flush.asm"
 
 align 16, db 0
-print: ; void print(int fd{rdi}, char *str{rsi}, size_t len{rdx})
+print:
 ; rax: current buffer position
 ; r8: buffer endpoint
 ; rdx: string endpoint

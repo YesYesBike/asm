@@ -1,5 +1,6 @@
 asdf
 mem.map
 tags
-README.html
+*.html
 testistest
+log

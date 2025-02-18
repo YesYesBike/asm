@@ -4,8 +4,7 @@
 %include "lib/io/print.asm"
 %include "lib/io/print_int_d.asm"
 
-dump_stack: ; void dump_stack(int fd{rdi}, int num{rsi}, func_p{rdx})
-; dump the stack from rsp up to [rsp+(8*'num')] to 'fd' in a format of 'func_p'
+dump_stack:
 ; rdi: fd
 ; rsi: func arg
 ; rdx: print length

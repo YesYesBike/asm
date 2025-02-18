@@ -4,9 +4,7 @@
 %include "lib/io/print.asm"
 %include "lib/io/print_int_x.asm"
 
-dump_memory: ; void dump_memory(int fd{rdi}, void *p{rsi}, size_t n{rdx}, func_p{rcx})
-; void func_p(int fd{rdi}, long num{rsi}) / print_int_x
-; prints each bytes from 'p' to 'p'+'n'-1 in a format of 'func_p' to fd
+dump_memory:
 
 ; rax: 'p'+'n', loop endpoint
 ; rbx: 'p', loop

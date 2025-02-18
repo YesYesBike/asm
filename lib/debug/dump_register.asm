@@ -3,15 +3,7 @@
 
 %include "lib/io/print.asm"
 
-dump_register: ; void dump_register(int fd{[rsp+8]}, func_p{[rsp+16]})
-; void func_p(int fd{rdi}, long num{rsi}) / ex)print_int_x
-
-; dump registers(rax~r15) to 'fd' using 'func_p'
-; TODO remove note1
-; NOTE: 'fd' and 'func_p' affects to rsp. So subtract 16 from rsp to get
-;       the right rsp value
-; NOTE2: push 'func_p' first and 'fd' next (so confusing)
-
+dump_register:
 ; rax: start of the stack loop (~rbp)
 ; rcx: register name string pointer
 ; rdx: string length per register

@@ -1,7 +1,7 @@
 %ifndef FUNC_UTF8GETBYTE
 %define FUNC_UTF8GETBYTE
 
-utf8getbyte: ; byte{al} utf8encode_getbyte(int code{edi})
+utf8getbyte:
 ; return the number of bytes of the 'code' needed in utf8 format
 ; return 0 if code is out of range
 	xor rax, rax

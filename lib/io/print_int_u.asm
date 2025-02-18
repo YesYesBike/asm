@@ -3,7 +3,7 @@
 
 %include "lib/io/print.asm"
 
-print_int_u: ; void print_int_u(int fd{rdi}, long num{rsi})
+print_int_u:
 ; print the unsigned decimal number from 'num' to 'fd'
 ; rdi: fd
 ; rsi: original dividend([rbp]) -> divisor(10)

@@ -1,12 +1,12 @@
-%ifndef FUNC_FILE_READ
-%define FUNC_FILE_READ
+%ifndef FUNC_WRITE
+%define FUNC_WRITE
 
 %include "lib/sys/syscalls.asm"
 
-file_read:
+write:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_READ
+	mov rax, SYS_WRITE
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

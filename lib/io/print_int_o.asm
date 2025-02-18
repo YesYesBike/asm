@@ -3,7 +3,7 @@
 
 %include "lib/io/print.asm"
 
-print_int_o: ; void print_int_o(int fd{rdi}, long num{rsi})
+print_int_o:
 ; print the octal number from 'num' to 'fd'
 ; rbp: stores the original stack pointer
 ; rsp: points to the string

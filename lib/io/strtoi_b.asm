@@ -1,10 +1,10 @@
 %ifndef FUNC_STRTOI_B
 %define FUNC_STRTOI_B
 
-strtoi_b: ; long{rax} strtoi_b(char *str{rdi})
+strtoi_b:
 ; get the integer number from null-terminated string 'str' with a binary format
 ; format: "0b..."
-; it doesn't check any of error... so don't give it a garbage...
+; it doesn't check any kind of error... so don't give it a garbage...
 ; it doesn't check overflow...
 
 ; rax: return number / free to use

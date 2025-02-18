@@ -1,7 +1,7 @@
 %ifndef FUNC_STRLEN
 %define FUNC_STRLEN
 
-strlen: ; long{rax} strlen(char *str{rdi})
+strlen:
 ; sil: temp
 	push rsi
 	mov rax, rdi

@@ -1,12 +1,12 @@
-%ifndef FUNC_FILE_WRITE
-%define FUNC_FILE_WRITE
+%ifndef FUNC_UNLINK
+%define FUNC_UNLINK
 
 %include "lib/sys/syscalls.asm"
 
-file_write:
+unlink:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_WRITE
+	mov rax, SYS_UNLINK
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

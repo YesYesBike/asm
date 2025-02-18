@@ -3,7 +3,7 @@
 
 %include "lib/io/print.asm"
 
-print_int_x: ; void print_int_x(int fd{rdi}, long num{rsi})
+print_int_x:
 ; print the hexadecimal number from 'num' to 'fd'
 ; rbp: stores the original stack pointer
 ; rsp: points to the string
