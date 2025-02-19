@@ -5,7 +5,7 @@
 %include "lib/io/strlen.asm"
 %include "lib/etc/swap.asm"
 
-print_str: ; void print_str(int fd{rdi}, char *str{rsi})
+print_str:
 	push rax
 	push rdx
 

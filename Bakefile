@@ -29,3 +29,7 @@ test:
 	chmod u+x $(target_test)
 	./$(target_test)
 	echo "Exit Code: $?"
+
+#TODO: fix '#' in double quote bug
+doc:
+	firefox --new-tab "${PWD}/lib_doc.html"

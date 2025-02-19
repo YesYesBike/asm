@@ -1,12 +1,12 @@
-%ifndef FUNC_CHMOD
-%define FUNC_CHMOD
+%ifndef FUNC_DUP3
+%define FUNC_DUP3
 
 %include "lib/sys/syscalls.asm"
 
-chmod:
+dup3:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_CHMOD
+	mov rax, SYS_DUP3
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

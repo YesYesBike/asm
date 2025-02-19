@@ -1,12 +1,12 @@
-%ifndef FUNC_CHMOD
-%define FUNC_CHMOD
+%ifndef FUNC_PWRITE
+%define FUNC_PWRITE
 
 %include "lib/sys/syscalls.asm"
 
-chmod:
+pwrite:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_CHMOD
+	mov rax, SYS_PWRITE
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

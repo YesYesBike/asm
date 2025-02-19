@@ -1,12 +1,12 @@
-%ifndef FUNC_CHMOD
-%define FUNC_CHMOD
+%ifndef FUNC_LSEEK
+%define FUNC_LSEEK
 
 %include "lib/sys/syscalls.asm"
 
-chmod:
+lseek:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_CHMOD
+	mov rax, SYS_LSEEK
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

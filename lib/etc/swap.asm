@@ -1,3 +1,5 @@
+; I didn't knew xchg
+
 %ifndef MACRO_SWAP
 %define MACRO_SWAP
 

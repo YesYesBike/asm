@@ -1,5 +1,5 @@
-%ifndef FUNC__OPEN
-%define FUNC__OPEN
+%ifndef FUNC_OPEN
+%define FUNC_OPEN
 
 %include "lib/sys/syscalls.asm"
 

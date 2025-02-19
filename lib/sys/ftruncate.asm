@@ -1,12 +1,12 @@
-%ifndef FUNC_CHMOD
-%define FUNC_CHMOD
+%ifndef FUNC_FTRUNCATE
+%define FUNC_FTRUNCATE
 
 %include "lib/sys/syscalls.asm"
 
-chmod:
+ftruncate:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_CHMOD
+	mov rax, SYS_FTRUNCATE
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

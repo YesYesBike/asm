@@ -1,12 +1,12 @@
-%ifndef FUNC_CHMOD
-%define FUNC_CHMOD
+%ifndef FUNC_READV
+%define FUNC_READV
 
 %include "lib/sys/syscalls.asm"
 
-chmod:
+readv:
 	SYS_PUSH_SYSCALL_CLOBBERED_REGISTERS
 
-	mov rax, SYS_CHMOD
+	mov rax, SYS_READV
 	syscall
 
 	SYS_POP_SYSCALL_CLOBBERED_REGISTERS

@@ -9,11 +9,22 @@
 %define SYS_STAT 4
 %define SYS_LSEEK 8
 %define SYS_IOCTL 16
+%define SYS_PREAD 17
+%define SYS_PWRITE 18
+%define SYS_READV 19
+%define SYS_WRITEV 20
+%define SYS_DUP 32
+%define SYS_DUP2 33
 %define SYS_EXIT 60
+%define SYS_TRUNCATE 76
+%define SYS_FTRUNCATE 77
 %define SYS_GETDENTS 217;78
 %define SYS_UNLINK 87
 %define SYS_CHMOD 90
 %define SYS_GETTIMEOFDAY 96
+%define SYS_DUP3 292
+%define SYS_PREADV 295
+%define SYS_PWRITEV 296
 %define SYS_GETRANDOM 318
 
 ; file descriptors
@@ -22,11 +33,11 @@
 %define SYS_STDERR 2
 
 ; permissions for SYS_OPEN
-%define SYS_READ_ONLY 0x000
-%define SYS_WRITE_ONLY 0x001
-%define SYS_READ_WRITE 0x002
-%define SYS_CREATE_FILE 0x040
-%define SYS_TRUNCATE 0x200
+%define SYS_RDONLY 0x000
+%define SYS_WRONLY 0x001
+%define SYS_RDWR 0x002
+%define SYS_CREAT 0x040
+%define SYS_TRUNC 0x200
 %define SYS_DEFAULT_PERMISSIONS 644o
 %define SYS_EXECUTE_PERMISSIONS 755o
 
